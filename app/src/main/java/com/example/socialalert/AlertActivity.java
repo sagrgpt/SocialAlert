@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -17,6 +18,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -26,6 +29,9 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
+
+import es.dmoral.toasty.Toasty;
+
 import static java.text.DateFormat.getDateInstance;
 import static java.text.DateFormat.getTimeInstance;
 
@@ -77,8 +83,7 @@ public class AlertActivity extends AppCompatActivity {
             return;
         }
         if(!alertACTIVE) {
-
-
+            Toasty.info(getApplicationContext(),"Getting location...",Toast.LENGTH_SHORT).show();
             alertACTIVE = true;
             alert_btn.setText(R.string.btn_text_cancel);
             getLocation();
@@ -110,6 +115,7 @@ public class AlertActivity extends AppCompatActivity {
                 Log.d("Location",String.valueOf(loc.getLatitude()));
                 String lat = String.valueOf(loc.getLatitude());
                 String lng = String.valueOf(loc.getLongitude());
+                Toasty.custom(getApplicationContext(),"Location Received!",R.drawable.ic_location, Color.TRANSPARENT,Toast.LENGTH_SHORT,true,true).show();
                 createNews(lat,lng);
             }
 
@@ -150,6 +156,7 @@ public class AlertActivity extends AppCompatActivity {
                 date);
         key = databaseReference.push().getKey();
         databaseReference.child(key).setValue(data);
+        Toasty.success(getApplicationContext(),"People have been informed! Stay Strong.",Toast.LENGTH_LONG).show();
     }
 
     public void onNetworkClicked(View view) {
@@ -207,6 +214,7 @@ public class AlertActivity extends AppCompatActivity {
         dr2.setValue(data);
         databaseReference.removeValue();
         alertACTIVE = false;
+        Toasty.info(getApplicationContext(),"Alert removed. Hope you are Safe!",Toast.LENGTH_SHORT).show();
         alert_btn.setText(R.string.btn_text_alert);
     }
 
