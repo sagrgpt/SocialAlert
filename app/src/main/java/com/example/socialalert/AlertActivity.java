@@ -78,6 +78,12 @@ public class AlertActivity extends AppCompatActivity {
         else settings.setVisibility(View.GONE);
 
     }
+
+    public void onNetworkClicked(View view) {
+        startActivity(new Intent(AlertActivity.this,NetworkActivity.class));
+        finish();
+    }
+
     public void onAlert(View view) {
         if (!sharedPreferences.getBoolean("IsSet", false)) {
             return;
@@ -157,12 +163,6 @@ public class AlertActivity extends AppCompatActivity {
         key = databaseReference.push().getKey();
         databaseReference.child(key).setValue(data);
         Toasty.success(getApplicationContext(),"People have been informed! Stay Strong.",Toast.LENGTH_LONG).show();
-    }
-
-    public void onNetworkClicked(View view) {
-        if(alertACTIVE) {
-            copyData();
-        }
     }
 
     private void buildAlertMessageNoGps() {

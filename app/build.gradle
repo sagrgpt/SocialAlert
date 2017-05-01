@@ -28,6 +28,8 @@ dependencies {
     compile 'com.google.firebase:firebase-database:10.2.4'
     compile 'com.jakewharton:butterknife:8.5.1'
     compile 'com.github.GrenderG:Toasty:1.2.3'
+    compile 'com.android.support:design:25.3.1'
+    compile 'com.android.support:support-v4:25.3.1'
     testCompile 'junit:junit:4.12'
 }
 apply plugin: 'com.google.gms.google-services'
