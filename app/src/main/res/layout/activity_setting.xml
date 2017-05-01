@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.socialalert.SettingActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/save_btn">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="30dp">
+
+                <ImageView
+                    android:id="@+id/user_icon"
+                    android:src="@drawable/ic_user"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"/>
+
+                <EditText
+                    android:id="@+id/username"
+                    android:inputType="textCapWords"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="50dp"
+                    android:layout_toEndOf="@+id/user_icon"
+                    android:hint="@string/name_hint"
+                    android:maxLines="1"
+                    android:textAppearance="?android:textAppearanceMedium"/>
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#616161"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="30dp">
+
+                <ImageView
+                    android:id="@+id/message_icon"
+                    android:src="@drawable/ic_message"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"/>
+
+                <EditText
+                    android:id="@+id/message"
+                    android:inputType="textMultiLine"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="top"
+                    android:layout_marginStart="50dp"
+                    android:layout_toEndOf="@+id/message_icon"
+                    android:text="@string/default_message_text"
+                    android:textAppearance="?android:textAppearanceMedium"/>
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#616161"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="30dp">
+
+                <ImageView
+                    android:id="@+id/contact_icon"
+                    android:src="@drawable/ic_contacts"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"/>
+
+                <EditText
+                    android:id="@+id/contact1"
+                    android:inputType="number"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="fill_vertical"
+                    android:layout_marginStart="50dp"
+                    android:layout_toEndOf="@+id/contact_icon"
+                    android:hint="@string/hint_contact_1"
+                    android:textAppearance="?android:textAppearanceMedium"/>
+
+                <EditText
+                    android:id="@+id/contact2"
+                    android:inputType="number"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="fill_vertical"
+                    android:layout_marginStart="50dp"
+                    android:layout_toEndOf="@+id/contact_icon"
+                    android:layout_below="@+id/contact1"
+                    android:layout_marginTop="5dp"
+                    android:hint="@string/hint_contact_2"
+                    android:textAppearance="?android:textAppearanceMedium"/>
+
+                <EditText
+                    android:id="@+id/contact3"
+                    android:inputType="number"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="fill_vertical"
+                    android:layout_marginStart="50dp"
+                    android:layout_toEndOf="@+id/contact_icon"
+                    android:layout_below="@+id/contact2"
+                    android:layout_marginTop="5dp"
+                    android:hint="@string/hint_contact_3"
+                    android:textAppearance="?android:textAppearanceMedium"/>
+
+                <EditText
+                    android:id="@+id/contact4"
+                    android:inputType="number"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="fill_vertical"
+                    android:layout_marginStart="50dp"
+                    android:layout_toEndOf="@+id/contact_icon"
+                    android:layout_below="@+id/contact3"
+                    android:layout_marginTop="5dp"
+                    android:hint="@string/hint_contact_4"
+                    android:textAppearance="?android:textAppearanceMedium"/>
+            </RelativeLayout>
+
+            </LinearLayout>
+
+
+</ScrollView>
+
+    <Button
+        android:id="@+id/save_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:text="@string/text_save_btn"
+        android:textColor="#FFFFFF"
+        android:textAppearance="?android:textAppearanceLarge"
+        android:background="@color/colorAccent"
+        android:onClick="SavePreference"/>
+
+</RelativeLayout>

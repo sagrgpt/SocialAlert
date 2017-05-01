@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "303843903602",
+    "firebase_url": "https://social-alert-b4fb3.firebaseio.com",
+    "project_id": "social-alert-b4fb3",
+    "storage_bucket": "social-alert-b4fb3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:303843903602:android:f530db4e446d159a",
+        "android_client_info": {
+          "package_name": "com.example.socialalert"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "303843903602-oujkfhviqdnvvulcs80ns7d34efgon8r.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.socialalert",
+            "certificate_hash": "0c193224629d82d8fcf554a3ffe33b8aa2da5a26"
+          }
+        },
+        {
+          "client_id": "303843903602-i7635bh0mr5feea5kbsl7vhe9md5ejf1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDyY4uzhALFcGOO5x0fb6Kx2x80Io1n4bM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "303843903602-i7635bh0mr5feea5kbsl7vhe9md5ejf1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
