@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">SocialAlert</string>
+    <string name="btn_text_alert">Alert</string>
+    <string name="btn_text_cancel">Cancel</string>
+    <string name="settings_label">settings</string>
+    <string name="default_message_text">I\'m in danger. Please help me if you are nearby</string>
+    <string name="name_hint">Name</string>
+    <string name="hint_contact_1">Contact 1</string>
+    <string name="hint_contact_2">Contact 2</string>
+    <string name="hint_contact_3">Contact 3</string>
+    <string name="hint_contact_4">Contact 4</string>
+    <string name="text_save_btn">Save</string>
+    <string name="text_preferences">Preferences not set. Click here!</string>
+    <string name="text_network_btn">Network</string>
 </resources>
