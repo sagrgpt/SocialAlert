@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SocialAlert</string>
+    <string name="app_name">Social Alert</string>
     <string name="btn_text_alert">Alert</string>
     <string name="btn_text_cancel">Cancel</string>
     <string name="settings_label">settings</string>

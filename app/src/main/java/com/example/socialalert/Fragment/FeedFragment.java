@@ -71,17 +71,16 @@ public class FeedFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                fetchData(dataSnapshot);
+                onRefresh();
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-                fetchData(dataSnapshot);
-            }
+                onRefresh();            }
 
             @Override
             public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
+                onRefresh();
             }
 
             @Override
@@ -106,5 +105,11 @@ public class FeedFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             recyclerView.setAdapter(mAdapter);
             swipeRefreshLayout.setRefreshing(false);
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        onRefresh();
     }
 }

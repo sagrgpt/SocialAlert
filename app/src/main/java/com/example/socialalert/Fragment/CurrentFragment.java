@@ -58,13 +58,13 @@ public class CurrentFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
     @Override
     public void onRefresh() {
-        dataArray.clear();
         getData();
     }
 
     private void getData() {
 
         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("Current");
+
         mDatabase.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -74,12 +74,12 @@ public class CurrentFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                fetchData(dataSnapshot);
+                onRefresh();
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-                onRefresh();
+                removeData(dataSnapshot);
             }
 
             @Override
@@ -108,6 +108,36 @@ public class CurrentFragment extends Fragment implements SwipeRefreshLayout.OnRe
             dataArray.add(info);
             mAdapter = new CurrentAdapter(dataArray);
             recyclerView.setAdapter(mAdapter);
+            swipeRefreshLayout.setRefreshing(false);
+        }
+    }
+
+    public void removeData(DataSnapshot dataSnapshot){
+        if(dataSnapshot.getValue()!=null) {
+            Log.d("Datalog", "onChildAdded:" + dataSnapshot.getKey());
+            AlertData info = new AlertData();
+            Map<String, String> map = (Map) dataSnapshot.getValue();
+            info.username = map.get("username");
+            info.time = map.get("time");
+            info.date = map.get("date");
+            info.message = map.get("message");
+            info.latitude = map.get("latitude");
+            info.longitude = map.get("longitude");
+            int index=-1;
+            for(int i=0; i<=dataArray.size();i++){
+                if(dataArray.get(i).date.equals(map.get("date"))){
+                    index = i;
+                    break;
+                }
+            }
+            if(index>-1) {
+                dataArray.remove(index);
+                mAdapter.notifyItemRemoved(index);
+            }
+//            dataArray.remove(info);
+
+//            mAdapter = new CurrentAdapter(dataArray);
+//            recyclerView.setAdapter(mAdapter);
             swipeRefreshLayout.setRefreshing(false);
         }
     }
