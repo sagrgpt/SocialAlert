@@ -221,9 +221,9 @@ public class AlertActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        if(alertACTIVE) {
-            copyData();
-        }
+//        if(alertACTIVE) {
+//            copyData();
+//        }
     }
 
 }

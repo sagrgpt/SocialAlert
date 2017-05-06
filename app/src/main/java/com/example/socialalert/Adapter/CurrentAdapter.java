@@ -18,8 +18,6 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import org.w3c.dom.Text;
-
 import java.util.Collections;
 import java.util.List;
 
@@ -55,7 +53,7 @@ public class CurrentAdapter extends RecyclerView.Adapter<CurrentAdapter.MyViewHo
     @Override
     public CurrentAdapter.MyViewHolderClass onCreateViewHolder(ViewGroup parent, int viewType) {
         context = parent.getContext();
-        View view = LayoutInflater.from(context).inflate(R.layout.current_row_layout,parent,false);
+        View view = LayoutInflater.from(context).inflate(R.layout.feed_row_layout,parent,false);
         CurrentAdapter.MyViewHolderClass holder = new CurrentAdapter.MyViewHolderClass(view);
         return holder;
     }
