@@ -1,6 +1,5 @@
 package com.example.socialalert;
 
-import android.*;
 import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -19,13 +18,13 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
@@ -35,14 +34,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
-
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
-
 import es.dmoral.toasty.Toasty;
-
 import static java.text.DateFormat.getDateInstance;
 import static java.text.DateFormat.getTimeInstance;
 
@@ -58,11 +54,13 @@ public class AlertActivity extends AppCompatActivity implements GoogleApiClient.
     LocationManager manager;
     LocationListener locationListener;
     GoogleApiClient mGoogleApiClient;
+    SmsManager smsManager;
 
     DatabaseReference databaseReference;
     String key;
     AlertData changeData;
     private static final int LOCATION_ACCESS_PERMISSION = 1;
+    private static final int SEND_SMS_PERMISSION = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,13 +77,14 @@ public class AlertActivity extends AppCompatActivity implements GoogleApiClient.
             }
         }
 
+        askPermissions();
+
         settings = (TextView) findViewById(R.id.settings);
         alert_btn = (Button) findViewById(R.id.alert_btn);
         alertLayout = (ViewGroup) findViewById(R.id.alertLayout);
 
         //Subscribe to firebase notification topic 'default topic for all'
         FirebaseMessaging.getInstance().subscribeToTopic("All");
-        Toast.makeText(getApplicationContext(), "TOpic Suscribed", Toast.LENGTH_SHORT).show();
         Log.d("Firebase Topic", "Subscribed to news topic");
 
 
@@ -107,6 +106,18 @@ public class AlertActivity extends AppCompatActivity implements GoogleApiClient.
 
     }
 
+    private void askPermissions() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            Log.d("location", "Getting user permission for fine location");
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    LOCATION_ACCESS_PERMISSION);
+        }
+        else if(ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(this,new String[] {Manifest.permission.SEND_SMS},SEND_SMS_PERMISSION);
+        }
+    }
+
     public void onNetworkClicked(View view) {
         startActivity(new Intent(AlertActivity.this, NetworkActivity.class));
         finish();
@@ -118,9 +129,7 @@ public class AlertActivity extends AppCompatActivity implements GoogleApiClient.
             return;
         }
         if (!alertACTIVE) {
-            Toasty.info(getApplicationContext(), "Getting location...", Toast.LENGTH_SHORT).show();
-            alertACTIVE = true;
-            alert_btn.setText(R.string.btn_text_cancel);
+            toastingInfo("Getting Location","info");
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
             {
 
@@ -135,7 +144,38 @@ public class AlertActivity extends AppCompatActivity implements GoogleApiClient.
         }
     }
 
+    public void messageTransaction(String lat, String lng){
+        try{
+            smsManager = SmsManager.getDefault();
+            String c1, c2, c3, c4, message, name, msg;
+            c1 = sharedPreferences.getString("Contact1",null);
+            c2 = sharedPreferences.getString("Contact2",null);
+            c3 = sharedPreferences.getString("Contact3",null);
+            c4 = sharedPreferences.getString("Contact4",null);
+            msg = sharedPreferences.getString("Message",null);
+            name = sharedPreferences.getString("Name",null);
+            message = name+""+msg+" Get directions: "+"http://maps.google.com/?q="+lat+","+lng;
+            smsManager.sendTextMessage(c1,null,message,null,null);
+            smsManager.sendTextMessage(c2,null,message,null,null);
+            smsManager.sendTextMessage(c3,null,message,null,null);
+            smsManager.sendTextMessage(c4,null,message,null,null);
+            Log.d("Message c1 to",c1+" "+message);
+            Log.d("Message c2 to ",c2+" "+message);
+            Log.d("Message c3 to",c3+" "+message);
+            Log.d("Message c4 to",c4+" "+message);
+            Toast.makeText(this, "Message Sent", Toast.LENGTH_SHORT).show();
+        }catch(Exception e){
+            Toast.makeText(this,"Unable to send message",Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
     public void onBeginLocationUpdate(){
+        manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            buildAlertMessageNoGps();
+            return;
+        }
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             Log.d("location", "Getting user permission for fine location");
             ActivityCompat.requestPermissions(this,
@@ -146,7 +186,13 @@ public class AlertActivity extends AppCompatActivity implements GoogleApiClient.
         if(mLastLocation!=null){
             String lat = String.valueOf(mLastLocation.getLatitude());
             String lng = String.valueOf(mLastLocation.getLongitude());
-            Toasty.custom(getApplicationContext(), "Location Received!", R.drawable.ic_location, Color.TRANSPARENT, Toast.LENGTH_SHORT, true, true).show();
+            toastingInfo("Location Recieved!","custom",R.drawable.ic_location,Color.TRANSPARENT);
+            if(ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED){
+                ActivityCompat.requestPermissions(AlertActivity.this,new String[] {Manifest.permission.SEND_SMS},SEND_SMS_PERMISSION);
+            }
+            else{
+                messageTransaction(lat, lng);
+            }
             createNews(lat, lng);
         }
     }
@@ -163,7 +209,13 @@ public class AlertActivity extends AppCompatActivity implements GoogleApiClient.
                 Log.d("Location", String.valueOf(loc.getLatitude()));
                 String lat = String.valueOf(loc.getLatitude());
                 String lng = String.valueOf(loc.getLongitude());
-                Toasty.custom(getApplicationContext(), "Location Received!", R.drawable.ic_location, Color.TRANSPARENT, Toast.LENGTH_SHORT, true, true).show();
+                toastingInfo("Location Recieved!","custom",R.drawable.ic_location,Color.TRANSPARENT);
+                if(ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED){
+                    ActivityCompat.requestPermissions(AlertActivity.this,new String[] {Manifest.permission.SEND_SMS},SEND_SMS_PERMISSION);
+                }
+                else{
+                    messageTransaction(lat, lng);
+                }
                 createNews(lat, lng);
             }
 
@@ -192,7 +244,8 @@ public class AlertActivity extends AppCompatActivity implements GoogleApiClient.
 
     private void createNews(String lat, String lng) {
         if(Build.VERSION.SDK_INT < Build.VERSION_CODES.M) manager.removeUpdates(locationListener);
-
+        alertACTIVE = true;
+        alert_btn.setText(R.string.btn_text_cancel);
         Calendar c = Calendar.getInstance();
         SimpleDateFormat sdf = (SimpleDateFormat) getTimeInstance();
         String time = sdf.format(c.getTime());
@@ -208,6 +261,7 @@ public class AlertActivity extends AppCompatActivity implements GoogleApiClient.
                 date);
         key = databaseReference.push().getKey();
         databaseReference.child(key).setValue(data);
+        toastingInfo("People have been informed! Stay Strong.","success");
         Toasty.success(getApplicationContext(),"People have been informed! Stay Strong.",Toast.LENGTH_LONG).show();
     }
 
@@ -260,7 +314,8 @@ public class AlertActivity extends AppCompatActivity implements GoogleApiClient.
         dr2.setValue(data);
         databaseReference.removeValue();
         alertACTIVE = false;
-        Toasty.info(getApplicationContext(),"Alert removed. Hope you are Safe!",Toast.LENGTH_SHORT).show();
+        toastingInfo("Alert removed. Hope you are Safe!","info");
+//        Toasty.info(getApplicationContext(),"Alert removed. Hope you are Safe!",Toast.LENGTH_SHORT).show();
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
             mGoogleApiClient.disconnect();
         alert_btn.setText(R.string.btn_text_alert);
@@ -274,10 +329,16 @@ public class AlertActivity extends AppCompatActivity implements GoogleApiClient.
             case LOCATION_ACCESS_PERMISSION: {
 
                 if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                    onBeginLocationUpdate();
+                    askPermissions();
                 }
-                else Toasty.error(getApplicationContext(),"Location Permission not granted",
-                        Toast.LENGTH_SHORT).show();
+                else toastingInfo("Location Permission not granted","error");
+                break;
+            }
+            case SEND_SMS_PERMISSION: {
+                if(grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                    askPermissions();
+                }
             }
         }
 
@@ -304,7 +365,7 @@ public class AlertActivity extends AppCompatActivity implements GoogleApiClient.
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        Toasty.error(getApplicationContext(),"Unable to fetch location").show();
+        toastingInfo("Unable to fetch location","error");
     }
 
     @Override
@@ -315,5 +376,20 @@ public class AlertActivity extends AppCompatActivity implements GoogleApiClient.
             copyData();
         }
         super.onStop();
+    }
+
+    public void toastingInfo(String msg, String type){
+        if(type.equals("info")){
+            Toasty.info(getApplicationContext(),msg).show();
+        }
+        else if(type.equals("success")){
+            Toasty.success(getApplicationContext(),msg,Toast.LENGTH_LONG).show();
+        }
+        else if(type.equals("error")){
+            Toasty.error(getApplicationContext(),msg).show();
+        }
+    }
+    public void toastingInfo(String msg, String type, int icon, int color){
+        Toasty.custom(getApplicationContext(),msg,icon,color, Toast.LENGTH_SHORT, true, true).show();
     }
 }

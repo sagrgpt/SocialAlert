@@ -61,6 +61,7 @@
                 <EditText
                     android:id="@+id/message"
                     android:inputType="textMultiLine"
+                    android:maxLength="42"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="top"
@@ -90,7 +91,7 @@
 
                 <EditText
                     android:id="@+id/contact1"
-                    android:inputType="number"
+                    android:inputType="number|text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="fill_vertical"
@@ -101,7 +102,7 @@
 
                 <EditText
                     android:id="@+id/contact2"
-                    android:inputType="number"
+                    android:inputType="number|text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="fill_vertical"
@@ -114,7 +115,7 @@
 
                 <EditText
                     android:id="@+id/contact3"
-                    android:inputType="number"
+                    android:inputType="number|text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="fill_vertical"
@@ -127,7 +128,7 @@
 
                 <EditText
                     android:id="@+id/contact4"
-                    android:inputType="number"
+                    android:inputType="number|text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="fill_vertical"

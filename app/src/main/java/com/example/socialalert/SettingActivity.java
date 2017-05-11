@@ -49,23 +49,23 @@ public class SettingActivity extends AppCompatActivity {
             Toast.makeText(this,"Invalid username!!",Toast.LENGTH_SHORT).show();
             return false;
         }
-        if(contact1.getText().toString().length()!=10){
+        if(contact1.getText().toString().length()!=13){
             Toast.makeText(this,"Invalid Contact1!!",Toast.LENGTH_SHORT).show();
             return false;
         }
-        if(contact2.getText().toString().length()!=10){
+        if(contact2.getText().toString().length()!=13){
             Toast.makeText(this,"Invalid Contact2!!",Toast.LENGTH_SHORT).show();
             return false;
         }
-        if(contact3.getText().toString().length()!=10){
+        if(contact3.getText().toString().length()!=13){
             Toast.makeText(this,"Invalid Contact3!!",Toast.LENGTH_SHORT).show();
             return false;
         }
-        if(contact4.getText().toString().length()!=10){
+        if(contact4.getText().toString().length()!=13){
             Toast.makeText(this,"Invalid Contact4!!",Toast.LENGTH_SHORT).show();
             return false;
         }
-        if(message.getText().toString().length()==10){
+        if(message.getText().toString().length()==13    ){
             Toast.makeText(this,"Invalid message!!",Toast.LENGTH_SHORT).show();
             return false;
         }
