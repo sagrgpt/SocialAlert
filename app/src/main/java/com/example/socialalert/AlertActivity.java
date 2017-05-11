@@ -77,8 +77,6 @@ public class AlertActivity extends AppCompatActivity implements GoogleApiClient.
             }
         }
 
-        askPermissions();
-
         settings = (TextView) findViewById(R.id.settings);
         alert_btn = (Button) findViewById(R.id.alert_btn);
         alertLayout = (ViewGroup) findViewById(R.id.alertLayout);
@@ -104,18 +102,6 @@ public class AlertActivity extends AppCompatActivity implements GoogleApiClient.
         //if settings done make text click gone
         else settings.setVisibility(View.GONE);
 
-    }
-
-    private void askPermissions() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            Log.d("location", "Getting user permission for fine location");
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    LOCATION_ACCESS_PERMISSION);
-        }
-        else if(ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED){
-            ActivityCompat.requestPermissions(this,new String[] {Manifest.permission.SEND_SMS},SEND_SMS_PERMISSION);
-        }
     }
 
     public void onNetworkClicked(View view) {
@@ -319,6 +305,18 @@ public class AlertActivity extends AppCompatActivity implements GoogleApiClient.
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
             mGoogleApiClient.disconnect();
         alert_btn.setText(R.string.btn_text_alert);
+    }
+
+    private void askPermissions() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            Log.d("location", "Getting user permission for fine location");
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    LOCATION_ACCESS_PERMISSION);
+        }
+        else if(ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(this,new String[] {Manifest.permission.SEND_SMS},SEND_SMS_PERMISSION);
+        }
     }
 
     @Override
