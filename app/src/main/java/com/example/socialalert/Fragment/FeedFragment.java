@@ -10,7 +10,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 import com.example.socialalert.Adapter.*;
 import com.example.socialalert.AlertData;
 import com.example.socialalert.R;
@@ -19,7 +18,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -28,7 +26,8 @@ public class FeedFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
     private RecyclerView recyclerView;
     private SwipeRefreshLayout swipeRefreshLayout;
-    CurrentAdapter mAdapter;
+    private CurrentAdapter mAdapter;
+    private DatabaseReference mDatabase;
     final List<AlertData> dataArray = new ArrayList<>();
 
     public FeedFragment() {
@@ -51,6 +50,9 @@ public class FeedFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         swipeRefreshLayout.setOnRefreshListener(this);
         swipeRefreshLayout.setRefreshing(true);
+        mDatabase = FirebaseDatabase.getInstance().getReference("Record");
+        mAdapter = new CurrentAdapter(dataArray);
+        recyclerView.setAdapter(mAdapter);
         onRefresh();
     }
 
@@ -59,53 +61,51 @@ public class FeedFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         dataArray.clear();
         getData();
     }
+
     private void getData() {
 
-        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("Record");
         mDatabase.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 fetchData(dataSnapshot);
-
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                onRefresh();
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-                onRefresh();            }
+            }
 
             @Override
             public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-                onRefresh();
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(getContext(), databaseError.toString(), Toast.LENGTH_SHORT).show();
             }
         });
     }
+
     public void fetchData(DataSnapshot dataSnapshot){
-        if(dataSnapshot.getValue()!=null) {
-            Log.d("Datalog", "onChildAdded:" + dataSnapshot.getKey());
-            AlertData info = new AlertData();
-            Map<String, String> map = (Map) dataSnapshot.getValue();
-            info.username = map.get("username");
-            info.time = map.get("time");
-            info.date = map.get("date");
-            info.message = map.get("message");
-            info.latitude = map.get("latitude");
-            info.longitude = map.get("longitude");
-            dataArray.add(info);
-            mAdapter = new CurrentAdapter(dataArray);
-            recyclerView.setAdapter(mAdapter);
-            swipeRefreshLayout.setRefreshing(false);
-        }
+
+        Log.d("Datalog", "onChildAdded:" + dataSnapshot.getKey());
+        AlertData info = new AlertData();
+        Map<String, String> map = (Map) dataSnapshot.getValue();
+        info.username = map.get("username");
+        info.time = map.get("time");
+        info.date = map.get("date");
+        info.message = map.get("message");
+        info.latitude = map.get("latitude");
+        info.longitude = map.get("longitude");
+        dataArray.add(info);
+        mAdapter = new CurrentAdapter(dataArray);
+        recyclerView.setAdapter(mAdapter);
+        swipeRefreshLayout.setRefreshing(false);
     }
+
+
 
     @Override
     public void onResume() {

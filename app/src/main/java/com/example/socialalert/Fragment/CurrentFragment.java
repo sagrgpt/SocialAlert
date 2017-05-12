@@ -85,7 +85,6 @@ public class CurrentFragment extends Fragment implements OnMapReadyCallback {
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-//                onRefresh();
             }
 
             @Override
@@ -95,7 +94,6 @@ public class CurrentFragment extends Fragment implements OnMapReadyCallback {
 
             @Override
             public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-//                onRefresh();
             }
 
             @Override

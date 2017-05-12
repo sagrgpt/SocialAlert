@@ -229,7 +229,9 @@ public class AlertActivity extends AppCompatActivity implements GoogleApiClient.
     }
 
     private void createNews(String lat, String lng) {
-        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.M) manager.removeUpdates(locationListener);
+        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            manager.removeUpdates(locationListener);
+        }
         alertACTIVE = true;
         alert_btn.setText(R.string.btn_text_cancel);
         Calendar c = Calendar.getInstance();
