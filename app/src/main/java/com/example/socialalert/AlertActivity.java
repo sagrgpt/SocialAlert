@@ -140,7 +140,7 @@ public class AlertActivity extends AppCompatActivity implements GoogleApiClient.
             c4 = sharedPreferences.getString("Contact4",null);
             msg = sharedPreferences.getString("Message",null);
             name = sharedPreferences.getString("Name",null);
-            message = name+""+msg+" Get directions: "+"http://maps.google.com/?q="+lat+","+lng;
+            message = "Its me, "+name+"\n"+msg+"\nGet directions: "+"http://maps.google.com/?q="+lat+","+lng;
             smsManager.sendTextMessage(c1,null,message,null,null);
             smsManager.sendTextMessage(c2,null,message,null,null);
             smsManager.sendTextMessage(c3,null,message,null,null);
