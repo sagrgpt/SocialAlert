@@ -1,6 +1,8 @@
 package com.example.socialalert;
 
 import android.Manifest;
+import android.animation.AnimatorInflater;
+import android.animation.AnimatorSet;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -44,6 +46,7 @@ import static java.text.DateFormat.getTimeInstance;
 
 public class AlertActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
+    AnimatorSet animatorSet;
 
     TextView settings;
     Button alert_btn;
@@ -81,6 +84,8 @@ public class AlertActivity extends AppCompatActivity implements GoogleApiClient.
         alert_btn = (Button) findViewById(R.id.alert_btn);
         alertLayout = (ViewGroup) findViewById(R.id.alertLayout);
 
+        animatorSet = new AnimatorSet();
+
         //Subscribe to firebase notification topic 'default topic for all'
         FirebaseMessaging.getInstance().subscribeToTopic("All");
         Log.d("Firebase Topic", "Subscribed to news topic");
@@ -110,12 +115,22 @@ public class AlertActivity extends AppCompatActivity implements GoogleApiClient.
     }
 
     public void onAlert(View view) {
+
+        //Working on animation
+        if(!animatorSet.isRunning()){
+            startAnimation();
+        }
+        if(animatorSet.isRunning()){
+            animatorSet.end();
+        }
+
         //Check if the preferences for contact has already been set..
         if (!sharedPreferences.getBoolean("IsSet", false)) {
             return;
         }
         if (!alertACTIVE) {
             toastingInfo("Getting Location","info");
+            startAnimation();
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
             {
 
@@ -392,4 +407,12 @@ public class AlertActivity extends AppCompatActivity implements GoogleApiClient.
     public void toastingInfo(String msg, String type, int icon, int color){
         Toasty.custom(getApplicationContext(),msg,icon,color, Toast.LENGTH_SHORT, true, true).show();
     }
+
+    private void startAnimation() {
+        AnimatorSet growAnimator = (AnimatorSet) AnimatorInflater.loadAnimator(this,R.animator.grow);
+        growAnimator.setTarget(alert_btn);
+        animatorSet.play(growAnimator);
+        animatorSet.start();
+    }
+
 }
